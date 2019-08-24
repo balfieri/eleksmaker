@@ -12,12 +12,15 @@ avrdude -c arduino -b 57600 -P /dev/cu.usbserial-1420 -p atmega328p -vv -U flash
 
 Test connection:
 
+<pre>
 screen /dev/cu.usbserial-1420 115200
 $         - to get help
 ctrl A \  - to exit
+</pre>
 
 Check Settings:
 
+<pre>
 screen /dev/cu.usbserial-1420 115200
 $$ ENTER
                                 Marco's Settings        Eleksmaker.com Settings
@@ -55,10 +58,11 @@ $122=10.000                     // 100.000              200
 $130=200.000                    // 5000.000
 $131=200.000                    // 5000.000
 $132=200.000                    // 5000.000
-
+</pre>
 
 Current Settings:
 
+<pre>
 $30=1000  // default, note that this is max power
 $32=1
 $100=80
@@ -67,6 +71,7 @@ $102=80
 $120=200
 $121=200
 $122=200
+</pre>
 
 Testing Laser:
 
@@ -74,41 +79,42 @@ Put on glasses.
 
 To Turn laser on and off (make sure the weak light button is not pressed):
 
+<pre>
 M3     ; constant laser power mode
-$32=0  ; Laser mode off
 S250   ; 250 = 1/4 POWER ;)     aka "spindle speed"
 S0     ; OFF
-
 M4     ; switch back to dynamic laser power mode
+</pre>
 
+Download Marco's Example PCB: https://reps.cc/?p=5
 
+<pre>
+test_pcb.gcode
+test_pcb.brd (Eagle)
+test_pcb.png (2400 dpi)
+</pre>
+
+Install Latest LaserWeb:
+
+https://laserweb.yurl.ch/documentation/installation/33-install-osx<br>
+https://github.com/LaserWeb/LaserWeb4-Binaries/releases<br>
+https://github.com/LaserWeb/LaserWeb4-Binaries/releases/download/untagged-4818330b6baa8213d4a7/LaserWeb-v4.0.996-130.dmg<br>
+</pre>
+
+Manual Mode:
+
+Run LaserWeb<br>
+Fool around with manual "jogging"<br>
+Make sure can't go too far.<br>
+
+LaserWeb configuration:
+
+<pre>
 Tool On:
 M42 P15 S1
 
 Tool Off:
 M42 P15 S1
-
-
-Download Marco's Example PCB:
-
-https://reps.cc/?p=5
-
-test_pcb.gcode
-test_pcb.brd (Eagle)
-test_pcb.png (2400 dpi)
-
-
-Install Latest LaserWeb:
-
-https://laserweb.yurl.ch/documentation/installation/33-install-osx
-https://github.com/LaserWeb/LaserWeb4-Binaries/releases
-https://github.com/LaserWeb/LaserWeb4-Binaries/releases/download/untagged-4818330b6baa8213d4a7/LaserWeb-v4.0.996-130.dmg
-
-Manual Mode:
-
-Run LaserWeb
-Fool around with manual "jogging".
-Make sure can't go too far.
-
+</pre>
 
 Load test_pcb and Laser It:
