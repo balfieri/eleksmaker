@@ -3,17 +3,18 @@ PCBs.
 
 I found this to be useful as a pre-start: https://github.com/jandelgado/eleksmaker_a3
 
-Downloaded https://github.com/gnea/grbl/releases/tag/v1.1f.20170801 
+Downloaded https://github.com/gnea/grbl/releases/tag/v1.1f.20170801  (I've included it here)
 brew install avrdude
 
 Decided to just flash the pre-built .hex file from the command line:
 
-avrdude -c arduino -b 57600 -P /dev/cu.usbserial-1420 -p atmega328p -vv -U flash:w:grbl_v1.1f.20170801.hex
+ls /dev/cu*
+avrdude -c arduino -b 57600 -P /dev/cu.usbserial-1440 -p atmega328p -vv -U flash:w:grbl_v1.1f.20170801.hex
 
 Test connection:
 
 <pre>
-screen /dev/cu.usbserial-1420 115200
+screen /dev/cu.usbserial-1440 115200
 $         - to get help
 ctrl A \  - to exit
 </pre>
@@ -21,7 +22,7 @@ ctrl A \  - to exit
 Check Settings:
 
 <pre>
-screen /dev/cu.usbserial-1420 115200
+screen /dev/cu.usbserial-1440 115200
 $$ ENTER
                                 Marco's Settings        Eleksmaker.com Settings
 $0=10
@@ -80,6 +81,7 @@ Put on glasses.
 To Turn laser on and off (make sure the weak light button is not pressed):
 
 <pre>
+$32=0  ; 
 M3     ; constant laser power mode
 S250   ; 250 = 1/4 POWER ;)     aka "spindle speed"
 S0     ; OFF
