@@ -3,10 +3,12 @@ PCBs.
 
 I found this to be useful as a pre-start: https://github.com/jandelgado/eleksmaker_a3
 
-Downloaded https://github.com/gnea/grbl/releases/tag/v1.1f.20170801  (I've included it here)
+Downloaded https://github.com/gnea/grbl/releases/tag/v1.1f.20170801.
+I've included the pre-built .hex file here.
+
 brew install avrdude
 
-Decided to just flash the pre-built .hex file from the command line:
+Flash the pre-built .hex file from the command line:
 
 ls /dev/cu*
 avrdude -c arduino -b 57600 -P /dev/cu.usbserial-1440 -p atmega328p -vv -U flash:w:grbl_v1.1f.20170801.hex
@@ -201,4 +203,13 @@ using "Laser Test" above.
 Once you know it works, substitute a blank pre-sensitized PCB.
 I recommend focusing the laser using the un-sensitized side, then
 flipping it over to etch the pre-sensitized side.  
-The laser should be strong enough to cut the photoresist.
+The laser is strong enough to cut the photoresist.
+
+* Polish board up to 10000 grit
+* Cut board into pieces
+* Sand the board edges with 400 grit sandpaper to remove burrs and flatten edges
+* Clean the board with soap and water to remove loose particles
+* Treat the board with muriatic acid (weaker HCl) to remove oxides and sulfates; can also try vinegar
+* Spin-coat photoresist
+* Laser the board
+* Use a sponge to apply FeCl - saves etchant
