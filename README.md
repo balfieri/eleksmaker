@@ -11,7 +11,13 @@ Decided to just flash the pre-built .hex file from the command line:
 ls /dev/cu*
 avrdude -c arduino -b 57600 -P /dev/cu.usbserial-1440 -p atmega328p -vv -U flash:w:grbl_v1.1f.20170801.hex
 
-Test connection:
+Watch closely and make sure it actually worked.  It should write it then read it back to
+verify it.  If it finishes in a few seconds, it didn't work.
+
+
+Manual Tests Outside LaserWeb:
+
+Test Connection 
 
 <pre>
 screen /dev/cu.usbserial-1440 115200
@@ -61,7 +67,7 @@ $131=200.000                    // 5000.000
 $132=200.000                    // 5000.000
 </pre>
 
-Current Settings:
+Default Eleksmaker Settings:
 
 <pre>
 $30=1000  // default, note that this is max power
@@ -73,6 +79,7 @@ $120=200
 $121=200
 $122=200
 </pre>
+
 
 Testing Laser:
 
@@ -88,7 +95,92 @@ S0     ; OFF
 M4     ; switch back to dynamic laser power mode
 </pre>
 
-Download Marco's Example PCB: https://reps.cc/?p=5
+
+Using LaserWeb
+
+Install Latest (one time):
+
+https://laserweb.yurl.ch/documentation/installation/33-install-osx<br>
+https://github.com/LaserWeb/LaserWeb4-Binaries/releases<br>
+https://github.com/LaserWeb/LaserWeb4-Binaries/releases/download/untagged-4818330b6baa8213d4a7/LaserWeb-v4.0.996-130.dmg<br>
+</pre>
+
+LaserWeb configuration:
+
+<pre>
+GCode Start:
+G21
+G90
+M4 S0
+
+GCode End:
+M5
+
+GCode Homing
+$H
+
+Tool On:
+M42 P15 S1
+
+Tool Off:
+M42 P15 S1
+
+Laser Intensity:
+S
+
+PWM Min S Value:
+0
+
+PWM Max S Value:
+1000
+
+Check-Size Power:
+25%
+
+Tool Test Power:
+100%
+
+Tool Test Duration:
+5000 ms
+</pre>
+
+Create an "Eleksmaker Init" macro that has these commands (we'll change these to Marco's settings later):
+
+<pre>
+$30=1000  
+$32=1
+$100=80
+$101=80
+$102=80
+$120=200
+$121=200
+$122=200
+</pre>
+
+Create a "Goto XY Zero" macro that has these commands:
+
+<pre>
+G0 X0Y0
+</pre>
+
+Create a "Laser Off" macro that has these commands:
+
+<pre>
+S0 M4
+</pre>
+
+Manual Testing:
+
+Go to "Control".
+Fool around with manual jogging.
+Use "Set Zero" to set the 0,0 point after you position over substrate.
+Use "Laser Test" to do a 5-second test of laser at full throttle.
+You can focus the laser during these 5 seconds.
+
+
+Run Marco's Test Case:
+
+Download Marco's Example PCB from: https://reps.cc/?p=5
 
 <pre>
 test_pcb.gcode
@@ -96,27 +188,17 @@ test_pcb.brd (Eagle)
 test_pcb.png (2400 dpi)
 </pre>
 
-Install Latest LaserWeb:
+Go to Files and click on Add Document.
+Select test_pcb.gcode.
+You should see a 50x50 mm image that includes a zebra head.
 
-https://laserweb.yurl.ch/documentation/installation/33-install-osx<br>
-https://github.com/LaserWeb/LaserWeb4-Binaries/releases<br>
-https://github.com/LaserWeb/LaserWeb4-Binaries/releases/download/untagged-4818330b6baa8213d4a7/LaserWeb-v4.0.996-130.dmg<br>
-</pre>
+Go back to Control
+Click on Run Job.
+The first time you run this, you might want to use a piece
+of plywood.  That implies that you would first focus the laser
+using "Laser Test" above.
 
-Manual Mode:
-
-Run LaserWeb<br>
-Fool around with manual "jogging"<br>
-Make sure can't go too far.<br>
-
-LaserWeb configuration:
-
-<pre>
-Tool On:
-M42 P15 S1
-
-Tool Off:
-M42 P15 S1
-</pre>
-
-Load test_pcb and Laser It:
+Once you know it works, substitute a blank pre-sensitized PCB.
+I recommend focusing the laser using the un-sensitized side, then
+flipping it over to etch the pre-sensitized side.  
+The laser should be strong enough to cut the photoresist.
