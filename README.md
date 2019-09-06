@@ -135,7 +135,13 @@ https://github.com/LaserWeb/LaserWeb4-Binaries/releases<br>
 https://github.com/LaserWeb/LaserWeb4-Binaries/releases/download/untagged-4818330b6baa8213d4a7/LaserWeb-v4.0.996-130.dmg<br>
 </pre>
 
-LaserWeb configuration:
+LaserWeb Connect to Device:
+
+Always remember to go into Communication and Connect to your Eleksmaker device.
+It's easy to forget this.  It must be done each time you start LaserWeb.
+
+
+LaserWeb configuration (one-time):
 
 <pre>
 GCode Start:
@@ -174,33 +180,24 @@ Tool Test Duration:
 5000 ms
 </pre>
 
-Create an "Eleksmaker Init" macro that has these commands (we'll change these to Marco's settings later):
-
-<pre>
-$30=1000  
-$32=1
-$100=80
-$101=80
-$102=80
-$120=200
-$121=200
-$122=200
-</pre>
-
-Create a "Goto XY Zero" macro that has these commands:
+Create a "Goto XY Zero" macro that has these commands.  You can create
+other macros, but this is the only one I use.
 
 <pre>
 G0 X0Y0
 </pre>
 
+
 Manual Testing:
+
+I hope you didn't forget to Connect to your device!
 
 Go to "Control".
 Fool around with manual jogging.
 Use "Set Zero" to set the 0,0 point after you position over substrate.
 Use "Laser Test" to do a 5-second test of laser at full throttle.
-You can focus the laser during these 5 seconds.
-
+You can focus the laser during these 5 seconds.  If you usually need
+more time, change the 5000ms above to 10000ms.
 
 Run Marco's Test Case:
 
@@ -227,11 +224,11 @@ I recommend focusing the laser using the un-sensitized side, then
 flipping it over to etch the pre-sensitized side.  
 The laser is strong enough to cut the photoresist.
 
-* Polish board up to 10000 grit
 * Cut board into pieces
 * Sand the board edges with 400 grit sandpaper to remove burrs and flatten edges
+* Polish each board up to 10000 grit
 * Clean the board with soap and water to remove loose particles
 * Treat the board with muriatic acid (weaker HCl) to remove oxides and sulfates; can also try vinegar
-* Spin-coat photoresist
+* Spin-coat thin layer of photoresist
 * Laser the board
 * Use a sponge to apply FeCl - saves etchant
