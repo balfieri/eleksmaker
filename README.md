@@ -8,10 +8,11 @@ I've included the pre-built .hex file here.
 
 brew install avrdude
 
-Flash the pre-built .hex file from the command line:
+Flash the pre-built .hex file from the command line.  This must be done each
+time you power-on the Eleksmaker board.
 
 ls /dev/cu*
-avrdude -c arduino -b 57600 -P /dev/cu.usbserial-1440 -p atmega328p -vv -U flash:w:grbl_v1.1f.20170801.hex
+avrdude -c arduino -b 57600 -P /dev/cu.usbserial-1420 -p atmega328p -vv -U flash:w:grbl_v1.1f.20170801.hex
 
 Watch closely and make sure it actually worked.  It should write it then read it back to
 verify it.  If it finishes in a few seconds, it didn't work.
@@ -22,7 +23,7 @@ Manual Tests Outside LaserWeb:
 Test Connection 
 
 <pre>
-screen /dev/cu.usbserial-1440 115200
+screen /dev/cu.usbserial-1420 115200
 $         - to get help
 ctrl A \  - to exit
 </pre>
@@ -30,7 +31,7 @@ ctrl A \  - to exit
 Check Settings:
 
 <pre>
-screen /dev/cu.usbserial-1440 115200
+screen /dev/cu.usbserial-1420 115200
 $$ ENTER
                                 Marco's Settings        Eleksmaker.com Settings
 $0=10
@@ -69,19 +70,46 @@ $131=200.000                    // 5000.000
 $132=200.000                    // 5000.000
 </pre>
 
-Default Eleksmaker Settings:
+<p>
+It seems to actually remember the last settings, so you can set them once.
+In the end, this is my configuration, which is the same as Marco's:
 
 <pre>
-$30=1000  // default, note that this is max power
+$0=10
+$1=25
+$2=0
+$3=7
+$4=0
+$5=0
+$6=0
+$10=3
+$11=0.010
+$12=0.002
+$13=0
+$20=0
+$21=1
+$22=1
+$23=0
+$24=1000.000
+$25=2000.000
+$26=250
+$27=10.000
+$30=1000
+$31=0
 $32=1
-$100=80
-$101=80
-$102=80
-$120=200
-$121=200
-$122=200
+$100=80.000
+$101=80.000
+$102=80.000
+$110=5000.000
+$111=5000.000
+$112=5000.000
+$120=100.000
+$121=100.000
+$122=100.000
+$130=5000.000
+$131=5000.000
+$132=5000.000
 </pre>
-
 
 Testing Laser:
 
@@ -163,12 +191,6 @@ Create a "Goto XY Zero" macro that has these commands:
 
 <pre>
 G0 X0Y0
-</pre>
-
-Create a "Laser Off" macro that has these commands:
-
-<pre>
-S0 M4
 </pre>
 
 Manual Testing:
