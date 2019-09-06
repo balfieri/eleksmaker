@@ -1,28 +1,30 @@
 I followed Marco Reps' build for the Eleksmaker A3 laser engraver.  I, too, am using it primarly for 
-PCBs.  A few differences:
+PCBs.  A couple differences from his build:
 
-- I am using the driver circuit that came with the laser, rather than trying to drive the 
-  laser diode directly.  I use a 3Q???? MOSFET which has a gate that is voltage controlled
-  by the PWM signal.
-- I am using the newer Trimanic TMC2209 rather than TMC2130.  
-  I snipped the same four pins as Marco, but they have slightly different meanings with the
-  TMC2209.  Regardless, it still took the defaults, which is what I wanted.
-  [I did not configure the extra Arduino to control the Trimanic.]
+- I am using the voltage-regulator circuit that came with the laser, rather than trying to drive the 
+  laser diode directly.  I still use an FQP30N06L N-channel MOSFET to control the power to the laser.
+  This kind of MOSFET has a gate that is voltage-controlled by the PWM signal.  Most MOSFETs
+  are current-controlled.  This means no resister is required between the Arduino and the 
+  gate of the FQP30N06L. [By the way, the P-channel version is FQP27P06.]
+- I am using the newer Trinamic TMC2209 rather than TMC2130.  
+  I snipped the same four pins that Marco did, but they have slightly different meanings with the
+  TMC2209.  Regardless, it still forces the TMC2209 to use good defaults, which means
+  I didn't have to add the extra Arduino to control the Trinamic.  
 
-I found this to be useful as a pre-start: https://github.com/jandelgado/eleksmaker_a3
+I also found this to be useful as a pre-start: https://github.com/jandelgado/eleksmaker_a3.  It
+references Marco's video and settings.
 
 Downloaded https://github.com/gnea/grbl/releases/tag/v1.1f.20170801.
-I've included the pre-built .hex file here.
-
-brew install avrdude
+I've included the pre-built .hex file here, which is all you need.
 
 Flash the pre-built .hex file from the command line.  This must be done each
 time you power-on the Eleksmaker board.
 
+brew install avrdude            (one-time)
 ls /dev/cu\*
 avrdude -c arduino -b 57600 -P /dev/cu.usbserial-1420 -p atmega328p -vv -U flash:w:grbl_v1.1f.20170801.hex
 
-Watch closely and make sure it actually worked.  It should write it then read it back to
+Watch closely and make sure it actually worked.  It should write the firmware and then read it back to
 verify it.  If it finishes in a few seconds, it didn't work.
 
 
@@ -79,10 +81,11 @@ $132=200.000    z max travel, mm        // 5000.000
 </pre>
 
 <p>
-The Eleksmaker seems to actually remember the last settings after power-on, 
-so you can set them once.  This is true even if you re-flash the GRBL code
-on the Aruino.  In the end, this is my configuration, which is 
-the same as Marco's, and I no longer need to worry about it:
+The GRBL firmware will actually remember the last settings after power-off/on, 
+so you can set them once and forget about them.  This is true even if you 
+re-flash the GRBL code on the Aruino, though may not be true if you re-flash with
+a different version.  In the end, this is my configuration, which is 
+the same as Marco's:
 
 <pre>
 $0=10
@@ -121,12 +124,12 @@ $131=5000.000
 $132=5000.000
 </pre>
 
-Testing Laser:
+Testing Laser Using a Terminal Program:
 
 Put on glasses.  Use high-quality UV-resistant glasses, not the ones that came with
 the Eleksmaker.
 
-To Turn laser on and off (make sure the weak light button is not pressed):
+To Turn the laser on and off (make sure the weak light button is not pressed):
 
 <pre>
 $32=0  ; 
@@ -139,6 +142,9 @@ M4     ; switch back to dynamic laser power mode
 
 Using LaserWeb
 
+We've confirmed that things are basically working and got all the GRBL settings correct.
+Now it's time to switch to LaserWeb.
+
 Install Latest (one time):
 
 https://laserweb.yurl.ch/documentation/installation/33-install-osx<br>
@@ -149,10 +155,10 @@ https://github.com/LaserWeb/LaserWeb4-Binaries/releases/download/untagged-481833
 LaserWeb Connect to Device:
 
 Always remember to go into Communication and Connect to your Eleksmaker device.
-It's easy to forget that.  It must be done each time you start LaserWeb.
+It's easy to forget to do that.  It must be done each time you start LaserWeb.
 
 
-LaserWeb configuration (one-time):
+LaserWeb configuration settings (one-time):
 
 <pre>
 GCode Start:
@@ -205,14 +211,17 @@ I hope you didn't forget to Connect to your device!
 
 Go to "Control".
 Fool around with manual jogging.
-Use "Set Zero" to set the 0,0 point after you position over substrate.
-Use "Laser Test" to do a 5-second test of laser at full throttle.
+
+Use "Set Zero" to set the 0,0 point after you position over the left-bottom
+corner of your substrate.
+
+Use "Laser Test" to do a 5-second test of laser at 25% throttle.
 You can focus the laser during these 5 seconds.  If you usually need
 more time, change the 5000ms above to 10000ms.
 
 Run Marco's Test Case:
 
-Download Marco's Example PCB from: https://reps.cc/?p=5
+Download Marco's Example PCB from: https://reps.cc/?p=5 (one-time).
 
 <pre>
 test_pcb.gcode
