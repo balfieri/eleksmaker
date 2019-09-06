@@ -1,5 +1,13 @@
 I followed Marco Reps' build for the Eleksmaker A3 laser engraver.  I, too, am using it primarly for 
-PCBs.
+PCBs.  A few differences:
+
+- I am using the driver circuit that came with the laser, rather than trying to drive the 
+  laser diode directly.  I use a 3Q???? MOSFET which has a gate that is voltage controlled
+  by the PWM signal.
+- I am using the newer Trimanic TMC2209 rather than TMC2130.  
+  I snipped the same four pins as Marco, but they have slightly different meanings with the
+  TMC2209.  Regardless, it still took the defaults, which is what I wanted.
+  [I did not configure the extra Arduino to control the Trimanic.]
 
 I found this to be useful as a pre-start: https://github.com/jandelgado/eleksmaker_a3
 
@@ -11,7 +19,7 @@ brew install avrdude
 Flash the pre-built .hex file from the command line.  This must be done each
 time you power-on the Eleksmaker board.
 
-ls /dev/cu*
+ls /dev/cu\*
 avrdude -c arduino -b 57600 -P /dev/cu.usbserial-1420 -p atmega328p -vv -U flash:w:grbl_v1.1f.20170801.hex
 
 Watch closely and make sure it actually worked.  It should write it then read it back to
@@ -33,46 +41,48 @@ Check Settings:
 <pre>
 screen /dev/cu.usbserial-1420 115200
 $$ ENTER
-                                Marco's Settings        Eleksmaker.com Settings
-$0=10
-$1=25
-$2=0
-$3=0                            // 7 
-$4=0
-$5=0
-$6=0
-$10=1                           // 3
-$11=0.010
-$12=0.002
-$13=0
-$20=0
-$21=0                           // 1
-$22=0                           // 1
-$23=0
-$24=25.000                      // 1000.000
-$25=500.000                     // 2000.000
-$26=250
-$27=1.000                       // 10.0
-$30=1000                        
-$31=0
-$32=0                           // 1                    1
-$100=250.000                    // 80.000               80
-$101=250.000                    // 80.000               80
-$102=250.000                    // 80.000               80
-$110=500.000                    // 5000.000
-$111=500.000                    // 5000.000
-$112=500.000                    // 5000.000
-$120=10.000                     // 100.000              200
-$121=10.000                     // 100.000              200
-$122=10.000                     // 100.000              200
-$130=200.000                    // 5000.000
-$131=200.000                    // 5000.000
-$132=200.000                    // 5000.000
+                Meaning                 Marco's Settings        Eleksmaker.com Settings
+$0=10           step pulse, usec
+$1=25           step idle delay, msec
+$2=0            step port invert mask
+$3=0            step dir  invert mask   // 7 
+$4=0            step enable invert bool
+$5=0            limit pins invert bool
+$6=0            probe pin invert bool
+$10=1           status report mask      // 3
+$11=0.010       junction deviation, mm
+$12=0.002       arc tolerance, mm
+$13=0           report inches, bool
+$20=0           soft limits, bool
+$21=0           hard limits, bool       // 1
+$22=0           homing cycle, bool      // 1
+$23=0           homing dir invert, mask
+$24=25.000      homing feed, mm/min     // 1000.000
+$25=500.000     homing seek, mm/min     // 2000.000
+$26=250         homing debounce, msec
+$27=1.000       homing pull-off, mm     // 10.0
+$30=1000        max spindle speed, rpm
+$31=0           min spindle speed, rpm
+$32=0           laser mode, bool        // 1                    1
+$100=250.000    x, step/mm              // 80.000               80
+$101=250.000    y, step/mm              // 80.000               80
+$102=250.000    z, step/mm              // 80.000               80
+$110=500.000    x max rate, mm/min      // 5000.000
+$111=500.000    y max rate, mm/min      // 5000.000
+$112=500.000    z max rate, mm/min      // 5000.000
+$120=10.000     x accel, mm/sec^2       // 100.000              200
+$121=10.000     y accel, mm/sec^2       // 100.000              200
+$122=10.000     z accel, mm/sec^2       // 100.000              200
+$130=200.000    x max travel, mm        // 5000.000
+$131=200.000    y max travel, mm        // 5000.000
+$132=200.000    z max travel, mm        // 5000.000
 </pre>
 
 <p>
-It seems to actually remember the last settings, so you can set them once.
-In the end, this is my configuration, which is the same as Marco's:
+The Eleksmaker seems to actually remember the last settings after power-on, 
+so you can set them once.  This is true even if you re-flash the GRBL code
+on the Aruino.  In the end, this is my configuration, which is 
+the same as Marco's, and I no longer need to worry about it:
 
 <pre>
 $0=10
@@ -106,14 +116,15 @@ $112=5000.000
 $120=100.000
 $121=100.000
 $122=100.000
-$130=5000.000
+$130=5000.000           // sometimes I set these much lower to avoid hitting the end
 $131=5000.000
 $132=5000.000
 </pre>
 
 Testing Laser:
 
-Put on glasses.
+Put on glasses.  Use high-quality UV-resistant glasses, not the ones that came with
+the Eleksmaker.
 
 To Turn laser on and off (make sure the weak light button is not pressed):
 
@@ -138,7 +149,7 @@ https://github.com/LaserWeb/LaserWeb4-Binaries/releases/download/untagged-481833
 LaserWeb Connect to Device:
 
 Always remember to go into Communication and Connect to your Eleksmaker device.
-It's easy to forget this.  It must be done each time you start LaserWeb.
+It's easy to forget that.  It must be done each time you start LaserWeb.
 
 
 LaserWeb configuration (one-time):
