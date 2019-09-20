@@ -1,3 +1,6 @@
+Note: this is a work in progress.  
+
+
 I followed Marco Reps' build for the Eleksmaker A3 laser engraver.  I, too, am using it primarly for 
 PCBs.  A couple differences from his build:
 
